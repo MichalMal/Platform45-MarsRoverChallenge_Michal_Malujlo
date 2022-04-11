@@ -1,8 +1,156 @@
-﻿@{
+﻿@model IEnumerable<Platform45_MarsRoverChallenge_Michal_Malujlo.Models.RoverModel>
+@{
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="row">
+    <div class="col-4">
+        <div class="card">
+            <div class="card-body">
+                <div class="p-3">
+                    <h4>Welcome to the Mars</h4>
+                    <p>
+                        This plateau of land is on mars and is ripe for discovery. land your rovers on this plateau and explore.
+                    </p>
+                    <ul class="text-muted">
+                        <li>This plateau of land is 10 blocks squared within a grid of co-ordinates 0 to 10 on the X axis and the same for the Y axis.</li>
+                        <li>0 on the X axis is the furthest to the left and 10 is the furthest to the right</li>
+                        <li>0 on the Y axis is the furthest to the bottom and 10 is the furthest to the top</li>
+                        <li>Creating a Rover will "land" the rover on this plateau with random co-ordiates and direction(bearing). </li>
+                        <li>In order to control a rover, Present a string of letters. </li>
+                        <li>The possible letters accepted within the string are 'L', 'R' and 'M'.</li>
+                        <li>'L' and 'R' makes the rover spin 90 degrees left or right respectively, changing its bearing but not its position.</li>
+                        <li>'M' moves the rover forward one grid point in the direction the rover is facing, and will maintain the same heading.</li>
+                        <li>Characters that are not part of the defined list of actions will simply be skipped.</li>
+                        <li>If the rover falls outside the plateau, it will be destroyed.</li>
+                    </ul>
+                    <button class="btn btn-success w-100" modal aria-current="true" data-bs-toggle="modal" data-bs-target="#addRoverModal">Add a Rover</button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-8">
+        <div class="card">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Rover Name</th>
+                                <th>X co-ordinate</th>
+                                <th>Y co-ordinate</th>
+                                <th>Bearing</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.ID)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.RoverName)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.X_Position)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Y_Position)
+                                    </td>
+                                    <td>
+                                        <h4><span class="badge bg-primary">@Html.DisplayFor(modelItem => item.Bearing)</span></h4>
+                                    </td>
+                                    <td>
+                                        <a modal aria-current="true" data-bs-toggle="modal" data-bs-target="#editRoverModal" class="btn btn-primary MoveBtnRover" id="@item.ID">Move</a>
+                                        <a asp-action="Delete" asp-route-id="@item.ID" class="btn btn-danger">Destroy</a></td>
+
+                                </tr>
+                            }
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+
+
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="addRoverModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Add a rover To the plateau</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form asp-action="Create" method=post>
+                <div class="modal-body">
+
+                    <div validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="form-group">
+                        <label for="RoverName" class="control-label">Rover Name</label>
+                        <input for="RoverName" name="RoverName" class="form-control" />
+                        <span validation-for="RoverName" class="text-danger"></span>
+                    </div>
+                    <div class="modal-footer">
+                        <div class="form-group">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <input type="submit" value="Create" class="btn btn-primary" />
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="editRoverModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Move Rover around plateau</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form asp-action="Edit" method=post>
+                    <div class="modal-body">
+
+                        <div validation-summary="ModelOnly" class="text-danger"></div>
+                        <input id="InputId" for="ID" name="ID" hidden class="form-control" />
+                        <div class="form-group">
+                            <label for="MovementString" class="control-label">Movement String</label>
+                            <input for="MovementString" name="MovementString" class="form-control" />
+                            <span validation-for="MovementString" class="text-danger"></span>
+                        </div>
+                        <div class="modal-footer">
+                            <div class="form-group">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <input type="submit" value="Edit" class="btn btn-primary" />
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+<script>
+
+     $('.MoveBtnRover').on('click', function() {
+        $("#InputId").val($(this)[0].id);
+    });
+</script>
+}
