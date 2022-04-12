@@ -1,7 +1,18 @@
 Platform45-MarsRoverChallenge_Michal_Malujlo
+Technical challenge In Asp.net core with a basic front end
 
-In Order to Start the project.
+In Order to Start the project on Visual Studio.
 - Add your connection string for your SQL Database in 'DefaultConnection' within appsettings.json 
-- If you have Visual Studio installed and SQL Server installed. It may be possible to skip the first step 
-	as the migrations will automatically use the integrates SQL Object Explorer.
-- start
+- click start debugging
+- Navigate to "https://localhost:7279/" if it did not open automatically.
+
+In order to run the project throug command line
+- Open command line and change directory to inside the project folder
+- Add your connection string for your SQL Database in 'DefaultConnection' within appsettings.json
+- type in the console "dotnet run"
+- Navigate to "https://localhost:7279/"
+
+
+============== TO DO ===========
+- unit tests 
+- input field validation
